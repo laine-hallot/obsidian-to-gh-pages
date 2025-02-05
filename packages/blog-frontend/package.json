@@ -2,5 +2,13 @@
   "name": "blog-frontend",
   "version": "0.0.1",
   "type": "module",
-  "main": "index.ts"
+  "main": "index.ts",
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.3",
+    "@tailwindcss/typography": "^0.5.16",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.1",
+    "postcss-nested": "^7.0.2",
+    "tailwindcss": "^4.0.3"
+  }
 }
