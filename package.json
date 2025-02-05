@@ -1,0 +1,15 @@
+{
+  "name": "obsidian-to-gh-pages",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "index.ts",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
