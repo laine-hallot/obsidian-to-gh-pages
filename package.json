@@ -2,7 +2,6 @@
   "name": "obsidian-to-gh-pages",
   "version": "0.0.1",
   "type": "module",
-  "main": "index.ts",
   "workspaces": [
     "packages/*"
   ],
@@ -13,13 +12,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@types/node": "^22.13.1",
-    "rehype-stringify": "^10.0.1",
-    "remark-directive": "^3.0.1",
-    "remark-math": "^6.0.0",
-    "remark-parse": "^11.0.0",
-    "remark-rehype": "^11.1.1",
-    "unified": "^11.0.5",
-    "unist-util-remove-position": "^5.0.0"
+    "typescript": "^5.8.2"
   }
 }

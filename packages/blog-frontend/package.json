@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "type": "module",
   "main": "index.ts",
+  "scripts": {
+    "exec": "node index.ts  --experimental-strip-types"
+  },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.0.3",
     "@tailwindcss/typography": "^0.5.16",
