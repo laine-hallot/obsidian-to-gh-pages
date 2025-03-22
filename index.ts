@@ -7,29 +7,9 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
 import { buildCss } from 'blog-frontend';
+import { mdToHtml } from 'md-to-html/index.js';
 
-const value = await readFile(path.resolve('./test-doc.md'), 'utf8');
-
-const processor = unified()
-  .use(remarkParse)
-  .use(remarkDirective)
-  .use(remarkMath);
-
-const parseTree = processor.parse(value);
-console.log(parseTree);
-const tree = await processor.run(parseTree);
-
-const hypeAstProcessor = processor().use(remarkRehype, {
-  allowDangerousHtml: true,
-});
-const hypeAst = await hypeAstProcessor.run(parseTree);
-
-const htmlProcessor = hypeAstProcessor().use(rehypeStringify);
-const html = await htmlProcessor.run(parseTree);
-const file = await htmlProcessor.process(value);
-
-console.dir(tree, { depth: null });
-console.log(hypeAst);
+const file = await mdToHtml('./test-doc.md');
 
 const template = `
 <!DOCTYPE html>

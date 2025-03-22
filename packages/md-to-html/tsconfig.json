@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "CommonJS",
+    "target": "es2024",
+    "sourceMap": true,
+    "outDir": "./dist/"
+  },
+  "include": ["index.ts"]
+}
