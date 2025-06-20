@@ -1,3 +1,5 @@
+import type { VFile } from 'vfile';
+
 import { readFile, writeFile } from 'fs/promises';
 import path from 'path';
 
@@ -8,7 +10,7 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
 
-export const mdToHtml = async (filePath: string) => {
+export const mdToHtml = async (filePath: string): Promise<VFile> => {
   const value = await readFile(path.resolve(filePath), 'utf8');
 
   const processor = unified()

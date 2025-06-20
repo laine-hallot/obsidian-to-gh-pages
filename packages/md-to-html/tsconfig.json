@@ -2,8 +2,9 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "module": "CommonJS",
-    "target": "es2024",
+    "target": "es2022",
     "sourceMap": true,
+    "declaration": true,
     "outDir": "./dist/"
   },
   "include": ["index.ts"]

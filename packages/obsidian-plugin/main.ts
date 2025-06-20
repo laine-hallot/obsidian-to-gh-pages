@@ -1,3 +1,5 @@
+import type { VFile } from 'vfile';
+
 import type * as NodeFS from 'node:fs/promises';
 import type * as NodePath from 'node:path';
 
@@ -17,29 +19,47 @@ export const path: typeof NodePath = window.require('node:path');
 
 // Remember to rename these classes and interfaces!
 
-interface MyPluginSettings {
+interface MdToPagesSettings {
 	outputDir: string;
+	fileExt: string;
+	standaloneHtml: boolean;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
-	outputDir: 'default',
+const DEFAULT_SETTINGS: MdToPagesSettings = {
+	outputDir: '',
+	fileExt: 'html',
+	standaloneHtml: false,
+};
+
+const formatOutputHtml = (
+	file: VFile,
+	title: string,
+	standaloneHtml: boolean
+): string => {
+	const baseHtmlString = file.toString();
+	if (standaloneHtml) {
+		return `<html><head><title>${title}</title></head><body>${baseHtmlString}</body></html>`;
+	}
+	return ``;
 };
 
 const publishNote = async (
 	{ basename, filePath }: { basename: string; filePath: string },
-	outputDir: string
+	outputDir: string,
+	fileExtension: string,
+	standaloneHtml: boolean
 ) => {
 	const parsedData = await mdToHtml(filePath);
-	const hmtlString = parsedData.toString();
+	const htmlString = formatOutputHtml(parsedData, basename, standaloneHtml);
 
 	await fsPromises.writeFile(
-		path.resolve(outputDir, `${basename}.html`),
-		hmtlString
+		path.resolve(outputDir, `${basename}.${fileExtension}`),
+		htmlString
 	);
 };
 
-export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+export default class MdToPages extends Plugin {
+	settings: MdToPagesSettings;
 
 	async onload() {
 		await this.loadSettings();
@@ -62,7 +82,9 @@ export default class MyPlugin extends Plugin {
 									basename: activeFile.basename,
 									filePath: fileSystemPath,
 								},
-								this.settings.outputDir
+								this.settings.outputDir,
+								this.settings.fileExt,
+								this.settings.standaloneHtml
 							);
 						}
 					}
@@ -104,7 +126,7 @@ export default class MyPlugin extends Plugin {
 		});
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
+		this.addSettingTab(new SettingTab(this.app, this));
 	}
 
 	onunload() {}
@@ -134,10 +156,10 @@ class SampleModal extends Modal {
 	}
 }
 
-class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+class SettingTab extends PluginSettingTab {
+	plugin: MdToPages;
 
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: MdToPages) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
@@ -171,6 +193,30 @@ class SampleSettingTab extends PluginSettingTab {
 					}
 				})
 			);
+		new Setting(containerEl)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.standaloneHtml)
+					.onChange(async (toggle) => {
+						this.plugin.settings.standaloneHtml = toggle;
+						await this.plugin.saveSettings();
+					})
+			)
+			.setName('Standalone HTML files')
+			.setDesc(
+				'Emit full HTML5 file with instead of a fragment (wrap output in html and body and add some styling)'
+			);
+
+		new Setting(containerEl)
+			.addText((textBox) =>
+				textBox
+					.setValue(this.plugin.settings.fileExt)
+					.onChange(async (value) => {
+						this.plugin.settings.fileExt = value;
+						await this.plugin.saveSettings();
+					})
+			)
+			.setName('File extension of emit files with');
 	}
 }
 
