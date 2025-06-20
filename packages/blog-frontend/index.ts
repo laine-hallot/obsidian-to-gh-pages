@@ -40,7 +40,7 @@ for (const post of blogPosts) {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="/output/app.css" rel="stylesheet">
+        <link href="output/app.css" rel="stylesheet">
     </head>
     <body>
         <article class="prose lg:prose-xl mx-auto">
