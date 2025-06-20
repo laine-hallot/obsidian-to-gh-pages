@@ -1,18 +1,9 @@
-import type { VFile } from 'vfile';
-
 import type * as NodeFS from 'node:fs/promises';
 import type * as NodePath from 'node:path';
 
-import {
-	App,
-	MarkdownView,
-	Modal,
-	Plugin,
-	PluginSettingTab,
-	Setting,
-	FileSystemAdapter,
-} from 'obsidian';
-import { mdToHtml } from 'md-to-html';
+import { App, Modal, Plugin, PluginSettingTab, Setting } from 'obsidian';
+
+import { singleNote } from './src/commands/single-note';
 
 export const fsPromises: typeof NodeFS = window.require('node:fs/promises');
 export const path: typeof NodePath = window.require('node:path');
@@ -31,66 +22,13 @@ const DEFAULT_SETTINGS: MdToPagesSettings = {
 	standaloneHtml: false,
 };
 
-const formatOutputHtml = (
-	file: VFile,
-	title: string,
-	standaloneHtml: boolean
-): string => {
-	const baseHtmlString = file.toString();
-	if (standaloneHtml) {
-		return `<html><head><title>${title}</title></head><body>${baseHtmlString}</body></html>`;
-	}
-	return ``;
-};
-
-const publishNote = async (
-	{ basename, filePath }: { basename: string; filePath: string },
-	outputDir: string,
-	fileExtension: string,
-	standaloneHtml: boolean
-) => {
-	const parsedData = await mdToHtml(filePath);
-	const htmlString = formatOutputHtml(parsedData, basename, standaloneHtml);
-
-	await fsPromises.writeFile(
-		path.resolve(outputDir, `${basename}.${fileExtension}`),
-		htmlString
-	);
-};
-
 export default class MdToPages extends Plugin {
 	settings: MdToPagesSettings;
 
 	async onload() {
 		await this.loadSettings();
 
-		this.addCommand({
-			id: 'publish-active-note',
-			name: 'Publish active note',
-			callback: () => {
-				const view = this.app.workspace.getActiveViewOfType(MarkdownView);
-				if (view !== null) {
-					const activeFile = view.file;
-					if (activeFile !== null) {
-						const { adapter: storageAdapter } = this.app.vault;
-						if (storageAdapter instanceof FileSystemAdapter) {
-							const fileSystemPath = storageAdapter.getFullPath(
-								activeFile.path
-							);
-							publishNote(
-								{
-									basename: activeFile.basename,
-									filePath: fileSystemPath,
-								},
-								this.settings.outputDir,
-								this.settings.fileExt,
-								this.settings.standaloneHtml
-							);
-						}
-					}
-				}
-			},
-		});
+		this.addCommand(singleNote(this));
 		this.addCommand({
 			id: 'publish-folder',
 			name: 'Publish a folder',
@@ -98,13 +36,13 @@ export default class MdToPages extends Plugin {
 				console.log('Hey, you!');
 			},
 		});
-		this.addCommand({
+		/* 		this.addCommand({
 			id: 'publish-preferred-folder',
 			name: 'Publish a folder',
 			callback: () => {
 				console.log('Hey, you!');
 			},
-		});
+		}); */
 		this.addCommand({
 			id: 'publish-vault',
 			name: 'Publish all notes in vault',

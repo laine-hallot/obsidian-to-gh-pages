@@ -1,4 +1,4 @@
-import { writeFile, readFile, readdir } from 'fs/promises';
+import { writeFile, readFile, readdir, mkdir } from 'fs/promises';
 import path from 'path';
 import autoprefixer from 'autoprefixer';
 import postcss from 'postcss';
@@ -49,6 +49,7 @@ for (const post of blogPosts) {
     </body>
   </html>`;
 
+  await mkdir(path.resolve('./output/'), { recursive: true });
   await writeFile(path.resolve('./output/', post), template, 'utf8');
   await buildCss();
 }
