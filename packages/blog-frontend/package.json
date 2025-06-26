@@ -10,6 +10,7 @@
     "@tailwindcss/postcss": "^4.0.3",
     "@tailwindcss/typography": "^0.5.16",
     "autoprefixer": "^10.4.20",
+    "edge.js": "^6.2.1",
     "postcss": "^8.5.1",
     "postcss-nested": "^7.0.2",
     "tailwindcss": "^4.0.3"
