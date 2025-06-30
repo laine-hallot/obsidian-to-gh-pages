@@ -6,3 +6,7 @@ some test text
 1. Dolor proident ex veniam dolore consequat nostrud voluptate ullamco aute.
 1. Aliqua deserunt deserunt culpa tempor.
 1. Veniam cillum incididunt mollit consequat pariatur cupidatat cillum eiusmod reprehenderit excepteur do minim ad sint.
+
+[[test]]
+
+![[other-test]]
